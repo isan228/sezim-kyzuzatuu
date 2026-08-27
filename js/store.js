@@ -1,17 +1,21 @@
 (function (global) {
-  const BLOB_ROOT = "https://jsonblob.com/api/jsonBlob";
+  const KEY = "rsvpItems";
 
   function pin() {
     return (global.INVITE && global.INVITE.adminPin) || "2026";
   }
 
-  function blobId() {
-    const cfg = (global.INVITE && global.INVITE.rsvp && global.INVITE.rsvp.blobId) || "";
-    return cfg || localStorage.getItem("rsvpBlobId") || "";
+  function onPages() {
+    return /\.github\.io$/i.test(location.hostname);
   }
 
-  function setBlobId(id) {
-    if (id) localStorage.setItem("rsvpBlobId", id);
+  function pantryId() {
+    const cfg = global.INVITE && global.INVITE.rsvp && global.INVITE.rsvp.pantryId;
+    return String(cfg || "").trim();
+  }
+
+  function basketUrl(id) {
+    return "https://getpantry.cloud/apiv1/pantry/" + id + "/basket/rsvps";
   }
 
   function summarize(items) {
@@ -42,7 +46,25 @@
     };
   }
 
-  async function localList(adminPin) {
+  function readLocal() {
+    try {
+      const data = JSON.parse(localStorage.getItem(KEY) || "[]");
+      return Array.isArray(data) ? data : [];
+    } catch (err) {
+      return [];
+    }
+  }
+
+  function writeLocal(items) {
+    localStorage.setItem(KEY, JSON.stringify(items));
+  }
+
+  function pack(items, extra) {
+    return Object.assign({ ok: true, items: items, stats: summarize(items) }, extra || {});
+  }
+
+  async function localApiList(adminPin) {
+    if (onPages()) throw new Error("pages");
     const res = await fetch("/api/rsvps?pin=" + encodeURIComponent(adminPin), {
       headers: { "X-Admin-Pin": adminPin }
     });
@@ -50,7 +72,8 @@
     return res.json();
   }
 
-  async function localCreate(item) {
+  async function localApiCreate(item) {
+    if (onPages()) throw new Error("pages");
     const res = await fetch("/api/rsvp", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -60,7 +83,8 @@
     return res.json();
   }
 
-  async function localDelete(id, adminPin) {
+  async function localApiDelete(id, adminPin) {
+    if (onPages()) throw new Error("pages");
     const res = await fetch("/api/rsvps/" + id + "?pin=" + encodeURIComponent(adminPin), {
       method: "DELETE",
       headers: { "X-Admin-Pin": adminPin }
@@ -69,44 +93,35 @@
     return res.json();
   }
 
-  async function ensureBlob() {
-    let id = blobId();
-    if (id) return id;
-    const res = await fetch(BLOB_ROOT, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: "[]"
-    });
-    if (!res.ok) throw new Error("cloud-create");
-    id = res.headers.get("X-jsonblob") || (res.headers.get("Location") || "").split("/").pop();
-    if (!id) throw new Error("cloud-id");
-    setBlobId(id);
-    return id;
-  }
-
-  async function cloudGet(id) {
-    const res = await fetch(BLOB_ROOT + "/" + id, { headers: { Accept: "application/json" } });
-    if (!res.ok) throw new Error("cloud-get");
+  async function pantryGet(id) {
+    const res = await fetch(basketUrl(id), { headers: { Accept: "application/json" } });
+    if (res.status === 400 || res.status === 404) return [];
+    if (!res.ok) throw new Error("pantry-get");
     const data = await res.json();
-    return Array.isArray(data) ? data : [];
+    if (Array.isArray(data)) return data;
+    return Array.isArray(data.items) ? data.items : [];
   }
 
-  async function cloudPut(id, items) {
-    const res = await fetch(BLOB_ROOT + "/" + id, {
+  async function pantryPut(id, items) {
+    const res = await fetch(basketUrl(id), {
       method: "PUT",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify(items)
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ items: items })
     });
-    if (!res.ok) throw new Error("cloud-put");
+    if (!res.ok) throw new Error("pantry-put");
   }
 
   async function list(adminPin) {
     try {
-      return await localList(adminPin);
+      return await localApiList(adminPin);
     } catch (err) {
-      const id = await ensureBlob();
-      const items = await cloudGet(id);
-      return { ok: true, items, stats: summarize(items), cloud: true, blobId: id };
+      const id = pantryId();
+      if (id) {
+        const items = await pantryGet(id);
+        writeLocal(items);
+        return pack(items, { cloud: true, pantryId: id });
+      }
+      return pack(readLocal(), { localOnly: true });
     }
   }
 
@@ -114,24 +129,37 @@
     const item = normalize(payload.name, payload.attend, payload.people);
     if (!item.name) throw new Error("name");
     try {
-      return await localCreate(item);
+      return await localApiCreate(item);
     } catch (err) {
-      const id = await ensureBlob();
-      const items = await cloudGet(id);
+      const id = pantryId();
+      if (id) {
+        const items = await pantryGet(id);
+        items.push(item);
+        await pantryPut(id, items);
+        writeLocal(items);
+        return { ok: true, item: item, cloud: true, pantryId: id };
+      }
+      const items = readLocal();
       items.push(item);
-      await cloudPut(id, items);
-      return { ok: true, item, cloud: true };
+      writeLocal(items);
+      return { ok: true, item: item, localOnly: true };
     }
   }
 
   async function remove(id, adminPin) {
     try {
-      return await localDelete(id, adminPin);
+      return await localApiDelete(id, adminPin);
     } catch (err) {
-      const blob = await ensureBlob();
-      const items = (await cloudGet(blob)).filter((x) => x.id !== id);
-      await cloudPut(blob, items);
-      return { ok: true, items, stats: summarize(items), cloud: true };
+      const pantry = pantryId();
+      if (pantry) {
+        const items = (await pantryGet(pantry)).filter((x) => x.id !== id);
+        await pantryPut(pantry, items);
+        writeLocal(items);
+        return pack(items, { cloud: true, pantryId: pantry });
+      }
+      const items = readLocal().filter((x) => x.id !== id);
+      writeLocal(items);
+      return pack(items, { localOnly: true });
     }
   }
 

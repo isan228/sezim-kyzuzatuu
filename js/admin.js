@@ -72,11 +72,10 @@
     $("#dash").hidden = false;
     render(data);
     const hint = $("#cloudHint");
-    if (data.cloud && data.blobId && !(window.INVITE.rsvp && window.INVITE.rsvp.blobId)) {
+    if (data.localOnly) {
       hint.hidden = false;
       hint.textContent =
-        "GitHub Pages: скопируйте этот ID в js/config.js → rsvp.blobId и запушьте, чтобы список был общий: " +
-        data.blobId;
+        "GitHub Pages не умеет общий сервер. Ответы с этой страницы видны здесь, если гость ответил в этом же браузере. Для общего списка у всех гостей запустите python server.py на компьютере.";
     } else {
       hint.hidden = true;
     }

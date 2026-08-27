@@ -66,7 +66,7 @@ window.INVITE = {
     deadline: "10 сентября 2026",
     telegram: "",
     whatsapp: "",
-    blobId: ""
+    pantryId: ""
   },
   ui: {
     seal: "Нажми",

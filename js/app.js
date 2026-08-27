@@ -288,18 +288,13 @@
       const btn = $("#submitBtn");
       btn.disabled = true;
       try {
-        const res = await fetch("/api/rsvp", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, attend, people: Number(people) })
-        });
-        if (!res.ok) throw new Error("save");
+        await window.RSVPStore.create({ name, attend, people: Number(people) });
         $("#rsvpThanks").classList.add("is-on");
         $("#rsvpThanks").textContent = attend === "no" ? data.ui.thanksNo : data.ui.thanksYes;
         btn.textContent = "Отправлено";
       } catch (err) {
         $("#rsvpThanks").classList.add("is-on");
-        $("#rsvpThanks").textContent = "Не удалось сохранить. Запустите server.py и попробуйте ещё раз.";
+        $("#rsvpThanks").textContent = "Не удалось сохранить. Обновите страницу и попробуйте ещё раз.";
         btn.disabled = false;
       }
     });

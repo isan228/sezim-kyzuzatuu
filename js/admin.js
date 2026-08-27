@@ -10,22 +10,9 @@
   let items = [];
   let filter = "all";
 
-  async function request(path, opts = {}) {
-    const headers = Object.assign({ "Content-Type": "application/json" }, opts.headers || {});
-    if (pin) headers["X-Admin-Pin"] = pin;
-    const sep = path.includes("?") ? "&" : "?";
-    const res = await fetch(`${path}${sep}pin=${encodeURIComponent(pin)}`, {
-      ...opts,
-      headers
-    });
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok) throw data;
-    return data;
-  }
-
   function render(data) {
     items = data.items || [];
-    const s = data.stats || {};
+    const s = data.stats || window.RSVPStore.summarize(items);
     $("#stats").innerHTML = `
       <div class="stat"><b>${s.total || 0}</b><span>откликов</span></div>
       <div class="stat"><b>${s.coming || 0}</b><span>придут</span></div>
@@ -77,10 +64,22 @@
   }
 
   async function load() {
-    const data = await request("/api/rsvps");
+    if (pin !== window.RSVPStore.pin()) {
+      throw new Error("pin");
+    }
+    const data = await window.RSVPStore.list(pin);
     $("#gate").hidden = true;
     $("#dash").hidden = false;
     render(data);
+    const hint = $("#cloudHint");
+    if (data.cloud && data.blobId && !(window.INVITE.rsvp && window.INVITE.rsvp.blobId)) {
+      hint.hidden = false;
+      hint.textContent =
+        "GitHub Pages: скопируйте этот ID в js/config.js → rsvp.blobId и запушьте, чтобы список был общий: " +
+        data.blobId;
+    } else {
+      hint.hidden = true;
+    }
   }
 
   $("#pinForm").addEventListener("submit", async (e) => {
@@ -93,6 +92,10 @@
     } catch (err) {
       sessionStorage.removeItem("adminPin");
       $("#pinError").hidden = false;
+      $("#pinError").textContent =
+        pin !== window.RSVPStore.pin()
+          ? "Неверный PIN"
+          : "PIN верный, но список не загрузился. Обновите страницу.";
     }
   });
 
@@ -109,14 +112,14 @@
     if (!btn) return;
     filter = btn.dataset.filter;
     document.querySelectorAll("#tabs button").forEach((b) => b.classList.toggle("is-on", b === btn));
-    render({ items, stats: summarize(items) });
+    render({ items, stats: window.RSVPStore.summarize(items) });
   });
 
   $("#rows").addEventListener("click", async (e) => {
     const btn = e.target.closest(".del");
     if (!btn) return;
     if (!confirm("Удалить этот отклик?")) return;
-    const data = await request(`/api/rsvps/${btn.dataset.id}`, { method: "DELETE" });
+    const data = await window.RSVPStore.remove(btn.dataset.id, pin);
     render(data);
   });
 
@@ -133,16 +136,6 @@
     a.download = "rsvp.csv";
     a.click();
   });
-
-  function summarize(list) {
-    const coming = list.filter((x) => x.attend === "yes" || x.attend === "plus");
-    return {
-      total: list.length,
-      coming: coming.length,
-      declined: list.filter((x) => x.attend === "no").length,
-      guests: coming.reduce((sum, x) => sum + Number(x.people || 0), 0)
-    };
-  }
 
   if (pin) {
     load().catch(() => {

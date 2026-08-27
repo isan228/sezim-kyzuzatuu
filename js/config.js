@@ -61,10 +61,12 @@ window.INVITE = {
     paletteNames: ["красный", "золото", "хаки", "терракота", "кремовый"],
     note: "Будем рады национальному кийиму или спокойным вечерним тонам."
   },
+  adminPin: "2026",
   rsvp: {
     deadline: "10 сентября 2026",
     telegram: "",
-    whatsapp: ""
+    whatsapp: "",
+    blobId: ""
   },
   ui: {
     seal: "Нажми",

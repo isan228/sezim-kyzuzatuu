@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f3ede0" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <title>Сезим — Кыз узатуу</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Marck+Script&family=Manrope:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="phone">
+    <div class="app" id="app">
+      <div class="start-screen" id="startScreen">
+        <img class="start-bg" id="coverPhoto" src="img/hero.jpg" alt="" />
+        <img class="deco shyrdak start-shyrdak" src="img/shyrdak.png" alt="" />
+        <img class="deco flowers start-flowers" src="img/gypsophila.png" alt="" />
+        <div class="start-veil"></div>
+        <p class="start-kicker">Кыз узатуу</p>
+        <h2 class="start-name">Сезим</h2>
+        <button class="seal" id="openBtn" type="button" aria-label="Открыть приглашение">
+          <span id="sealText">Нажми</span>
+        </button>
+      </div>
+
+      <button class="music-btn" id="musicBtn" type="button" hidden aria-label="Музыка">♪</button>
+      <audio id="bgMusic" loop preload="none"></audio>
+
+      <main class="invite">
+        <header class="hero">
+          <img class="deco shyrdak" src="img/shyrdak.png" alt="" />
+          <img class="deco drape" src="img/drape.png" alt="" />
+          <img class="deco landscape" id="heroMedia" src="img/landscape.png" alt="" />
+          <img class="deco flowers" src="img/gypsophila.png" alt="" />
+          <div class="hero-content">
+            <p class="kicker reveal-hero" id="invitedLine">Вы приглашены</p>
+            <img class="tunduk reveal-hero d1" src="img/tunduk.png" alt="" />
+            <h1 class="event-title reveal-hero d2" id="eventType">Кыз узатуу</h1>
+            <p class="subtitle reveal-hero d3" id="eventSubtitle">Провожаем нашу дорогую дочь и сестру</p>
+            <h2 class="script-name reveal-hero d4" id="heroName">Сезим</h2>
+            <p class="wish reveal-hero d6" id="eventWish">Будем рады разделить этот важный день с вами!</p>
+            <img class="tunduk small reveal-hero d7" src="img/tunduk.png" alt="" />
+            <p class="blessing reveal-hero d8" id="eventBlessing">Ак ниеттен, жаркын келечекке...</p>
+          </div>
+          <div class="scroll-hint">
+            <span class="chevron"></span>
+            <span>листайте вниз</span>
+          </div>
+        </header>
+
+        <section class="sec">
+          <h2 class="section-title reveal" id="calendarTitle">Сентябрь 2026</h2>
+          <div class="cal reveal" id="calendar"></div>
+        </section>
+
+        <section class="sec">
+          <h2 class="section-title reveal" id="countdownTitle">До торжества</h2>
+          <div class="countdown reveal">
+            <div class="count-card"><strong id="days">00</strong><span>дней</span></div>
+            <div class="count-card"><strong id="hours">00</strong><span>часов</span></div>
+            <div class="count-card"><strong id="minutes">00</strong><span>минут</span></div>
+            <div class="count-card"><strong id="seconds">00</strong><span>секунд</span></div>
+          </div>
+          <button class="gold-btn reveal" id="icsBtn" type="button">Добавить в календарь</button>
+        </section>
+
+        <section class="sec">
+          <h2 class="section-title reveal" id="whereTitle">Место проведения</h2>
+          <article class="place-card reveal" id="venueCard"></article>
+          <a class="gold-btn reveal" id="mapBtn" href="#" target="_blank" rel="noopener">Открыть карту 2GIS</a>
+        </section>
+
+        <section class="sec">
+          <h2 class="section-title reveal" id="programTitle">Тайминг</h2>
+          <div class="timing" id="timeline"></div>
+        </section>
+
+        <section class="sec">
+          <div class="gallery reveal" id="gallery"></div>
+        </section>
+
+        <section class="sec">
+          <h2 class="section-title reveal" id="dressTitle">Дресс-код</h2>
+          <p class="section-sub reveal" id="dressStyle"></p>
+          <div class="palette reveal" id="palette"></div>
+          <div class="palette-names reveal" id="paletteNames"></div>
+        </section>
+
+        <section class="sec">
+          <article class="tg-card reveal">
+            <img class="tunduk" src="img/tunduk.png" alt="" />
+            <h2 class="section-title" id="telegramTitle">Фото и видео</h2>
+            <p class="tg-text" id="telegramText"></p>
+            <a class="gold-btn" id="telegramBtn" href="#" target="_blank" rel="noopener">Басыңыз</a>
+          </article>
+        </section>
+
+        <section class="sec" id="rsvp">
+          <form class="rsvp-form reveal" id="rsvpForm">
+            <img class="tunduk" src="img/tunduk.png" alt="" />
+            <h2 class="section-title" id="formTitle">Анкета гостя</h2>
+
+            <label class="field">
+              <span id="nameLabel">Ваше имя:</span>
+              <input id="guestName" name="name" type="text" placeholder="имя" required autocomplete="name" />
+            </label>
+
+            <p class="field-label" id="attendLabel">Вы сможете прийти?</p>
+            <div class="choices" id="attendChoices"></div>
+
+            <label class="field people-field" id="peopleWrap">
+              <span id="peopleLabel">Количество людей:</span>
+              <div class="stepper">
+                <button type="button" id="minus" aria-label="меньше">−</button>
+                <input id="peopleCount" name="people" type="number" min="1" max="20" value="1" />
+                <button type="button" id="plus" aria-label="больше">+</button>
+              </div>
+            </label>
+
+            <button class="gold-btn" type="submit" id="submitBtn">Отправить</button>
+            <p class="rsvp-thanks" id="rsvpThanks"></p>
+          </form>
+        </section>
+
+        <footer class="footer">
+          <img class="tunduk small" src="img/tunduk.png" alt="" />
+          <p class="hosts" id="hosts">С уважением, хозяева торжества</p>
+          <p class="blessing" id="footerBlessing">Ак ниеттен, жаркын келечекке...</p>
+        </footer>
+
+        <div class="sticky-rsvp">
+          <a class="gold-btn" href="#rsvp" id="stickyRsvp">Заполнить анкету</a>
+        </div>
+      </main>
+
+      <div class="lightbox" id="lightbox" hidden>
+        <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Закрыть">×</button>
+        <img id="lightboxImg" alt="" />
+        <p id="lightboxCaption"></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

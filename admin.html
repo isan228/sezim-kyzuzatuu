@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Админка — отклики</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body>
+  <main class="wrap">
+    <section class="gate" id="gate">
+      <p class="eyebrow">Кыз узатуу · Сезим</p>
+      <h1>Админка</h1>
+      <p class="hint">Введите PIN, чтобы увидеть, кто откликнулся</p>
+      <form id="pinForm">
+        <input id="pin" type="password" inputmode="numeric" placeholder="PIN" autocomplete="current-password" />
+        <button type="submit">Войти</button>
+      </form>
+      <p class="error" id="pinError" hidden>Неверный PIN</p>
+    </section>
+
+    <section class="dash" id="dash" hidden>
+      <header class="top">
+        <div>
+          <p class="eyebrow">Кыз узатуу · Сезим</p>
+          <h1>Кто откликнулся</h1>
+        </div>
+        <button class="ghost" id="logout" type="button">Выйти</button>
+      </header>
+
+      <div class="stats" id="stats"></div>
+
+      <div class="toolbar">
+        <div class="tabs" id="tabs">
+          <button type="button" data-filter="all" class="is-on">Все</button>
+          <button type="button" data-filter="coming">Придут</button>
+          <button type="button" data-filter="no">Не смогут</button>
+        </div>
+        <button class="ghost" id="exportBtn" type="button">Скачать Excel (CSV)</button>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Имя</th>
+              <th>Ответ</th>
+              <th>Человек</th>
+              <th>Когда</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+        <p class="empty" id="empty" hidden>Пока никто не ответил</p>
+      </div>
+    </section>
+  </main>
+  <script src="js/admin.js"></script>
+</body>
+</html>

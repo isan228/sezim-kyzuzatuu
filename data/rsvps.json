@@ -1,0 +1,16 @@
+[
+  {
+    "id": "c21719fc5d0d7d4b",
+    "name": "Исан Базаров",
+    "attend": "yes",
+    "people": 2,
+    "createdAt": "2026-08-27T15:37:33"
+  },
+  {
+    "id": "6b04fb3c927e7d72",
+    "name": "дастан",
+    "attend": "plus",
+    "people": 2,
+    "createdAt": "2026-08-27T15:39:01"
+  }
+]

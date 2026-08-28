@@ -97,7 +97,39 @@
             <div class="count-card"><strong id="seconds">00</strong><span id="labelSeconds">сек</span></div>
           </div>
           <button class="gold-btn reveal" id="icsBtn" type="button">Календарга кошуу</button>
-          <a class="gold-btn reveal" id="mapBtn" href="#" target="_blank" rel="noopener">Картаны ачуу</a>
+        </section>
+
+        <section class="sec" id="place">
+          <h2 class="section-title reveal" id="whereTitle">Банкет залы</h2>
+          <article class="place-card reveal">
+            <div class="map-window">
+              <iframe
+                class="map-osm"
+                title="Петровка"
+                src="https://www.openstreetmap.org/export/embed.html?bbox=74.03%2C42.82%2C74.08%2C42.86&amp;layer=mapnik&amp;marker=42.839206%2C74.055542"
+                referrerpolicy="no-referrer-when-downgrade"
+              ></iframe>
+              <iframe
+                id="mapFrame"
+                class="map-2gis"
+                title="Rim Grand Hall — 2GIS"
+                referrerpolicy="no-referrer-when-downgrade"
+                allowfullscreen
+              ></iframe>
+              <a class="map-chip" id="mapTap" href="https://2gis.kg/bishkek/firm/70000001063765710" target="_blank" rel="noopener">2GIS ачуу</a>
+            </div>
+            <div class="venue-body">
+              <p class="place-time" id="venueName">Rim Grand Hall</p>
+              <h3 id="venuePlace">Ресторан Рим</h3>
+              <p class="place" id="venueType">Банкет залы</p>
+              <p class="addr" id="venueStreet">Центральная көчөсү, 133, 1-кабат</p>
+              <p class="addr" id="venueCity">с. Петровка, Москва району, Чүй облусу</p>
+              <p class="note" id="venueHours">Иш убактысы: күн сайын 10:00–01:00</p>
+              <p class="note" id="venueRating">2GIS баасы: 4.7 · 195 баа</p>
+            </div>
+          </article>
+          <a class="gold-btn reveal" id="mapBtn" href="https://2gis.kg/bishkek/firm/70000001063765710" target="_blank" rel="noopener">2GIS картасын ачуу</a>
+          <a class="ghost-btn reveal" id="routeBtn" href="https://2gis.kg/bishkek/directions/to/70000001063765710" target="_blank" rel="noopener">Маршрут</a>
         </section>
 
         <section class="sec" id="rsvp">

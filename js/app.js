@@ -24,8 +24,18 @@
     $("#calendarTitle").textContent = ui.calendarTitle;
     $("#countdownTitle").textContent = ui.countdownTitle;
     $("#icsBtn").textContent = ui.ics;
+    $("#whereTitle").textContent = ui.whereTitle;
+    $("#venueName").textContent = data.venue.name;
+    $("#venuePlace").textContent = `${data.venue.placeLabel} ${data.venue.place}`;
+    $("#venueType").textContent = data.venue.type;
+    $("#venueStreet").textContent = `${data.venue.street}, ${data.venue.floor}`;
+    $("#venueCity").textContent = `${data.venue.city}, ${data.venue.district}`;
+    $("#venueHours").textContent = `${ui.hoursLabel}: ${data.venue.hours}`;
+    $("#venueRating").textContent = `${ui.ratingLabel}: ${data.venue.rating} · ${data.venue.reviews} баа`;
     $("#mapBtn").textContent = ui.map;
     $("#mapBtn").href = data.mapUrl;
+    $("#routeBtn").textContent = ui.route;
+    $("#routeBtn").href = data.routeUrl;
     $("#formTitle").textContent = ui.formTitle;
     $("#nameLabel").textContent = ui.nameLabel;
     $("#guestName").placeholder = ui.namePh;
@@ -38,6 +48,7 @@
 
     renderCalendar();
     renderChoices();
+    renderMap();
 
     if (data.music) {
       $("#bgMusic").src = data.music;
@@ -60,6 +71,22 @@
       html += `<div class="cal-day${d === highlight ? " is-on" : ""}">${d}</div>`;
     }
     $("#calendar").innerHTML = html;
+  }
+
+  function renderMap() {
+    const frame = $("#mapFrame");
+    const tap = $("#mapTap");
+    if (!frame) return;
+    const v = data.venue;
+    const options = {
+      pos: { lat: v.lat, lon: v.lon, zoom: 16 },
+      opt: { city: "bishkek" },
+      org: String(data.mapOrgId)
+    };
+    frame.src =
+      "https://widgets.2gis.com/widget?type=firmsonmap&options=" +
+      encodeURIComponent(JSON.stringify(options));
+    if (tap) tap.href = data.mapUrl;
   }
 
   function renderChoices() {

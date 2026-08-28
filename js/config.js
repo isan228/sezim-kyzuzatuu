@@ -43,7 +43,7 @@ window.INVITE = {
   telegramAlbum: "",
   music: "",
   hostsLabel: "Той ээлери",
-  hosts: "Улан Назира",
+  hosts: "Уран Назира",
   adminPin: "2026",
   rsvp: {
     pantryId: ""
@@ -64,7 +64,7 @@ window.INVITE = {
     namePh: "атыңыз",
     attendLabel: "Келе аласызбы?",
     attendYes: "Ооба, келем",
-    attendPlus: "Жарым жардым менен келем",
+    attendPlus: "Өмүрлүк жарым менен барам",
     attendNo: "Тилекке каршы, келе албайм",
     peopleLabel: "Адам саны:",
     submit: "Жөнөтүү",

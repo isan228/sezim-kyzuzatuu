@@ -276,7 +276,7 @@ a {
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 92px 22px 88px;
+  padding: 78px 20px 96px;
 }
 
 .deco {
@@ -287,7 +287,7 @@ a {
 .shyrdak {
   top: -6px;
   left: -10px;
-  width: 64%;
+  width: 52%;
   mix-blend-mode: multiply;
   transform-origin: 18% 0;
   opacity: 0;
@@ -296,7 +296,7 @@ a {
 .drape {
   top: -18px;
   right: -28px;
-  width: 58%;
+  width: 54%;
   mix-blend-mode: multiply;
   opacity: 0;
 }
@@ -306,9 +306,9 @@ a {
   right: 0;
   bottom: 0;
   width: 100%;
-  height: 42%;
+  height: 36%;
   object-fit: cover;
-  object-position: center 68%;
+  object-position: center 72%;
   mask-image: linear-gradient(transparent, #000 38%);
   opacity: 0;
 }
@@ -316,7 +316,7 @@ a {
 .flowers {
   right: -8px;
   bottom: -8px;
-  width: 62%;
+  width: 48%;
   mix-blend-mode: multiply;
   opacity: 0;
 }
@@ -367,52 +367,84 @@ a {
   max-width: 340px;
 }
 
-#invitedLine {
-  font-family: "Playfair Display", serif;
-  font-size: 18px;
-  letter-spacing: 0.28em;
+#invitedLine,
+.kicker {
+  font-family: "Manrope", sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.42em;
   text-transform: uppercase;
   color: var(--gold-deep);
 }
 
-.tunduk {
-  width: 52px;
-  margin: 10px auto 8px;
-  mix-blend-mode: multiply;
-}
-
-.tunduk.small {
-  width: 36px;
+.bride-line {
+  margin-top: 10px;
+  font-family: "Playfair Display", serif;
+  font-size: clamp(18px, 5.2vw, 22px);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--olive);
 }
 
 .event-title {
   font-family: "Playfair Display", serif;
-  font-weight: 600;
-  font-size: clamp(34px, 10vw, 44px);
-  letter-spacing: 0.08em;
+  font-weight: 700;
+  font-size: clamp(28px, 8vw, 36px);
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   background: linear-gradient(180deg, #d4b56a 0%, #9a742c 52%, #c4a35a 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  line-height: 1.05;
+  line-height: 1.15;
+  margin-top: 4px;
 }
 
-.subtitle {
-  margin-top: 10px;
-  font-size: 11px;
-  letter-spacing: 0.12em;
+.call-line {
+  margin: 8px 0 2px;
+  font-size: 13px;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+}
+
+.hosts-label {
+  font-size: 10px;
+  letter-spacing: 0.32em;
   text-transform: uppercase;
   color: var(--muted);
 }
 
 .script-name {
-  margin: 8px 0 14px;
+  margin: 2px 0 4px;
   font-family: "Marck Script", cursive;
-  font-size: clamp(64px, 18vw, 84px);
+  font-size: clamp(42px, 12vw, 56px);
   font-weight: 400;
-  line-height: 0.95;
+  line-height: 1.05;
   color: var(--olive);
+}
+
+.ornament {
+  display: block;
+  position: relative;
+  width: 168px;
+  height: 18px;
+  margin: 8px auto;
+  background:
+    linear-gradient(var(--gold), var(--gold)) left center / 42% 1px no-repeat,
+    linear-gradient(var(--gold), var(--gold)) right center / 42% 1px no-repeat;
+}
+
+.ornament::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  margin: -5px 0 0 -5px;
+  border: 1px solid var(--gold);
+  transform: rotate(45deg);
+  background: var(--paper);
 }
 
 .meta {
@@ -447,6 +479,32 @@ a {
 
 .meta-col.time strong {
   font-size: 18px;
+}
+
+.meta-icon,
+.pin {
+  width: 16px;
+  height: 16px;
+  color: var(--gold-deep);
+  margin: 0 auto 2px;
+}
+
+.address {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 6px;
+  margin: 12px 8px 10px;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.address .pin {
+  flex-shrink: 0;
+  margin-top: 2px;
 }
 
 .meta-col.place strong {
@@ -641,6 +699,10 @@ section {
   background: linear-gradient(180deg, #d4b56a, #9a742c);
   color: #fffaf0;
   box-shadow: 0 10px 22px rgba(154, 116, 44, 0.28);
+}
+
+.gold-btn + .gold-btn {
+  margin-top: 10px;
 }
 
 .ghost-btn {
@@ -1017,31 +1079,32 @@ section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-end;
-  padding: 0 24px 72px;
+  justify-content: center;
+  padding: 0 24px 48px;
   overflow: hidden;
+  background: var(--cream) url("../img/parchment.jpg") center / cover;
   transition: opacity 0.85s ease, visibility 0.85s ease;
 }
 
-.start-bg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  animation: ken 22s ease-in-out infinite alternate;
+.start-screen .deco {
+  opacity: 0.95;
 }
 
-.start-veil {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(40, 32, 20, 0.15) 0%, rgba(30, 24, 16, 0.55) 55%, rgba(24, 18, 12, 0.82) 100%);
+.start-screen .landscape {
+  opacity: 0.9;
+}
+
+.start-copy {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  margin-bottom: 28px;
 }
 
 .start-shyrdak {
   top: -8px;
   left: -12px;
-  width: 62%;
+  width: 52%;
   opacity: 0.95;
   animation: sway 6s ease-in-out infinite;
 }
@@ -1049,7 +1112,7 @@ section {
 .start-flowers {
   right: -10px;
   bottom: -10px;
-  width: 58%;
+  width: 48%;
   opacity: 0.9;
 }
 
@@ -1057,7 +1120,7 @@ section {
 .start-name {
   position: relative;
   z-index: 2;
-  color: #f6f0e3;
+  color: var(--olive);
   text-align: center;
 }
 
@@ -1065,13 +1128,14 @@ section {
   letter-spacing: 0.32em;
   text-transform: uppercase;
   font-size: 12px;
+  color: var(--gold-deep);
   margin-bottom: 6px;
 }
 
 .start-name {
   font-family: "Marck Script", cursive;
   font-size: 64px;
-  margin-bottom: 28px;
+  margin-bottom: 0;
   font-weight: 400;
 }
 

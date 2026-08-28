@@ -5,23 +5,27 @@
   function fill() {
     const ui = data.ui;
     document.title = `${data.name} — Кыз узатуу`;
-    $("#coverPhoto").src = data.photos.cover;
     $("#sealText").textContent = ui.seal;
     $(".start-name").textContent = data.name;
     $("#invitedLine").textContent = data.invitedLine;
+    $("#brideLine").textContent = data.brideLine;
     $("#eventType").textContent = data.event;
-    $("#eventSubtitle").textContent = data.subtitle;
-    $("#heroName").textContent = data.name;
-    $("#eventWish").textContent = data.wish;
+    $("#callLine").textContent = data.callLine;
+    $("#hostsLabel").textContent = data.hostsLabel;
+    $("#heroName").textContent = data.hosts;
+    $("#metaDay").textContent = data.day;
+    $("#metaMonth").textContent = data.month;
+    $("#metaYear").textContent = data.year;
+    $("#metaTime").textContent = data.time;
+    $("#metaPlaceLabel").textContent = data.venue.placeLabel;
+    $("#metaPlace").textContent = data.venue.place;
+    $("#addressText").textContent = data.venue.address;
     $("#eventBlessing").textContent = data.blessing;
     $("#calendarTitle").textContent = ui.calendarTitle;
     $("#countdownTitle").textContent = ui.countdownTitle;
     $("#icsBtn").textContent = ui.ics;
-    $("#whereTitle").textContent = ui.whereTitle;
     $("#mapBtn").textContent = ui.map;
     $("#mapBtn").href = data.mapUrl;
-    $("#programTitle").textContent = ui.programTitle;
-    $("#dressTitle").textContent = ui.dressTitle;
     $("#formTitle").textContent = ui.formTitle;
     $("#nameLabel").textContent = ui.nameLabel;
     $("#guestName").placeholder = ui.namePh;
@@ -29,28 +33,11 @@
     $("#peopleLabel").textContent = ui.peopleLabel;
     $("#submitBtn").textContent = ui.submit;
     $("#stickyRsvp").textContent = ui.sticky;
-    $("#hosts").textContent = data.hosts;
+    $("#hosts").textContent = `${data.hostsLabel} · ${data.hosts}`;
     $("#footerBlessing").textContent = data.blessing;
-    $("#telegramTitle").textContent = ui.telegramTitle;
-    $("#telegramText").textContent = ui.telegramText;
-    $("#telegramBtn").textContent = ui.telegramBtn;
-    if (data.telegramAlbum) $("#telegramBtn").href = data.telegramAlbum;
-    else $("#telegramBtn").removeAttribute("href");
-
-    $("#venueCard").innerHTML = `
-      <div class="venue-photo"><img src="${data.photos.venue}" alt=""></div>
-      <div class="venue-body">
-        <div class="place-time">${data.venue.time}</div>
-        <h3>${data.venue.place}</h3>
-        <div class="addr">${data.venue.city ? data.venue.city + " · " : ""}${data.venue.address}</div>
-        <div class="note">${data.venue.note}</div>
-      </div>`;
 
     renderCalendar();
-    renderTiming();
-    renderGallery();
     renderChoices();
-    renderDress();
 
     if (data.music) {
       $("#bgMusic").src = data.music;
@@ -59,10 +46,11 @@
   }
 
   function renderCalendar() {
-    const week = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
-    const year = 2026;
-    const month = 8;
-    const highlight = 20;
+    const week = data.ui.weekdays || ["Дш", "Шш", "Шр", "Бш", "Жм", "Иш", "Жк"];
+    const start = new Date(data.dateISO);
+    const year = start.getFullYear();
+    const month = start.getMonth();
+    const highlight = start.getDate();
     const first = new Date(year, month, 1).getDay();
     const offset = first === 0 ? 6 : first - 1;
     const days = new Date(year, month + 1, 0).getDate();
@@ -72,33 +60,6 @@
       html += `<div class="cal-day${d === highlight ? " is-on" : ""}">${d}</div>`;
     }
     $("#calendar").innerHTML = html;
-  }
-
-  function renderTiming() {
-    $("#timeline").innerHTML = data.timeline
-      .map(
-        (item, i) => `
-        <article class="timing-item" style="animation-delay:${i * 0.12}s">
-          <strong>${item.time}</strong>
-          <div>
-            <h3>${item.title}</h3>
-            <p>${item.text}</p>
-          </div>
-        </article>`
-      )
-      .join("");
-  }
-
-  function renderGallery() {
-    $("#gallery").innerHTML = data.gallery
-      .map(
-        (item) => `
-        <figure class="polaroid" data-src="${item.src}" data-caption="${item.caption}">
-          <img src="${item.src}" alt="${item.caption}" loading="lazy">
-          <figcaption>${item.caption}</figcaption>
-        </figure>`
-      )
-      .join("");
   }
 
   function renderChoices() {
@@ -116,16 +77,6 @@
           <span>${o.label}</span>
         </label>`
       )
-      .join("");
-  }
-
-  function renderDress() {
-    $("#dressStyle").textContent = data.dresscode.style;
-    $("#palette").innerHTML = data.dresscode.palette
-      .map((c) => `<div class="swatch" style="background:${c}"></div>`)
-      .join("");
-    $("#paletteNames").innerHTML = data.dresscode.paletteNames
-      .map((n) => `<span>${n}</span>`)
       .join("");
   }
 
@@ -171,11 +122,12 @@
       },
       { root, threshold: 0.16 }
     );
-    document.querySelectorAll(".reveal, .timing-item").forEach((el) => io.observe(el));
+    document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
   }
 
   function parallax() {
     const media = $("#heroMedia");
+    if (!media) return;
     $(".app").addEventListener(
       "scroll",
       () => {
@@ -184,24 +136,6 @@
       },
       { passive: true }
     );
-  }
-
-  function lightbox() {
-    const box = $("#lightbox");
-    const img = $("#lightboxImg");
-    const caption = $("#lightboxCaption");
-    const close = () => box.setAttribute("hidden", "");
-    $("#gallery").addEventListener("click", (e) => {
-      const card = e.target.closest(".polaroid");
-      if (!card) return;
-      img.src = card.dataset.src;
-      caption.textContent = card.dataset.caption;
-      box.removeAttribute("hidden");
-    });
-    $("#lightboxClose").addEventListener("click", close);
-    box.addEventListener("click", (e) => {
-      if (e.target === box) close();
-    });
   }
 
   function pad(n) {
@@ -222,7 +156,7 @@
       `DTSTART:${fmtLocal(start)}`,
       `DTEND:${fmtLocal(end)}`,
       `SUMMARY:${data.name} — кыз узатуу`,
-      `LOCATION:${data.venue.place}`,
+      `LOCATION:${data.venue.placeLabel} ${data.venue.place}, ${data.venue.address}`,
       "END:VEVENT",
       "END:VCALENDAR"
     ].join("\r\n");
@@ -291,19 +225,13 @@
         await window.RSVPStore.create({ name, attend, people: Number(people) });
         $("#rsvpThanks").classList.add("is-on");
         $("#rsvpThanks").textContent = attend === "no" ? data.ui.thanksNo : data.ui.thanksYes;
-        btn.textContent = "Отправлено";
+        btn.textContent = data.ui.sent;
       } catch (err) {
         $("#rsvpThanks").classList.add("is-on");
-        $("#rsvpThanks").textContent = "Не удалось сохранить. Обновите страницу и попробуйте ещё раз.";
+        $("#rsvpThanks").textContent = data.ui.saveError;
         btn.disabled = false;
       }
     });
-
-    $("#telegramBtn").addEventListener("click", (e) => {
-      if (!data.telegramAlbum) e.preventDefault();
-    });
-
-    lightbox();
   }
 
   fill();

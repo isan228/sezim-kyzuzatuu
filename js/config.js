@@ -18,7 +18,8 @@ window.INVITE = {
     shyrdak: "img/shyrdak.png",
     drape: "img/drape.png",
     landscape: "img/landscape.png",
-    flowers: "img/gypsophila.png"
+    flowers: "img/gypsophila.png",
+    venue: "img/venue.jpg"
   },
   venue: {
     placeLabel: "Ресторан",
@@ -42,7 +43,7 @@ window.INVITE = {
   telegramAlbum: "",
   music: "",
   hostsLabel: "Той ээлери",
-  hosts: "Уран Назира",
+  hosts: "Улан Назира",
   adminPin: "2026",
   rsvp: {
     pantryId: ""
@@ -52,8 +53,8 @@ window.INVITE = {
     calendarTitle: "Сентябрь 2026",
     countdownTitle: "Тойго чейин",
     weekdays: ["Дш", "Шш", "Шр", "Бш", "Жм", "Иш", "Жк"],
-    map: "2GIS картасын ачуу",
-    route: "Маршрут",
+    map: "2GIS'те көрсөтүү",
+    route: "Маршрутту көрсөтүү",
     whereTitle: "Банкет залы",
     hoursLabel: "Иш убактысы",
     ratingLabel: "2GIS баасы",

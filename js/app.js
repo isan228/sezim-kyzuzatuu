@@ -32,6 +32,7 @@
     $("#venueCity").textContent = `${data.venue.city}, ${data.venue.district}`;
     $("#venueHours").textContent = `${ui.hoursLabel}: ${data.venue.hours}`;
     $("#venueRating").textContent = `${ui.ratingLabel}: ${data.venue.rating} · ${data.venue.reviews} баа`;
+    if ($("#venuePhoto") && data.photos.venue) $("#venuePhoto").src = data.photos.venue;
     $("#mapBtn").textContent = ui.map;
     $("#mapBtn").href = data.mapUrl;
     $("#routeBtn").textContent = ui.route;
@@ -48,7 +49,6 @@
 
     renderCalendar();
     renderChoices();
-    renderMap();
 
     if (data.music) {
       $("#bgMusic").src = data.music;
@@ -68,25 +68,9 @@
     let html = week.map((d) => `<div class="cal-head">${d}</div>`).join("");
     for (let i = 0; i < offset; i += 1) html += `<div></div>`;
     for (let d = 1; d <= days; d += 1) {
-      html += `<div class="cal-day${d === highlight ? " is-on" : ""}">${d}</div>`;
+      html += `<div class="cal-day${d === highlight ? " is-on" : ""}" style="--d:${(d * 0.02).toFixed(2)}s">${d}</div>`;
     }
     $("#calendar").innerHTML = html;
-  }
-
-  function renderMap() {
-    const frame = $("#mapFrame");
-    const tap = $("#mapTap");
-    if (!frame) return;
-    const v = data.venue;
-    const options = {
-      pos: { lat: v.lat, lon: v.lon, zoom: 16 },
-      opt: { city: "bishkek" },
-      org: String(data.mapOrgId)
-    };
-    frame.src =
-      "https://widgets.2gis.com/widget?type=firmsonmap&options=" +
-      encodeURIComponent(JSON.stringify(options));
-    if (tap) tap.href = data.mapUrl;
   }
 
   function renderChoices() {
@@ -147,22 +131,89 @@
           }
         });
       },
-      { root, threshold: 0.16 }
+      { root, threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
     );
-    document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+    document.querySelectorAll(".reveal, .stagger-in").forEach((el) => io.observe(el));
   }
 
-  function parallax() {
-    const media = $("#heroMedia");
-    if (!media) return;
-    $(".app").addEventListener(
-      "scroll",
-      () => {
-        const y = $(".app").scrollTop;
-        if (y < window.innerHeight) media.style.transform = `translate3d(0, ${y * 0.22}px, 0)`;
-      },
-      { passive: true }
-    );
+  function motion() {
+    const root = $(".app");
+    const hero = $(".hero");
+    const content = $(".hero-content");
+    const hint = $(".scroll-hint");
+    const curve = $("#scrollFill");
+    const bead = $("#scrollBead");
+    const svgEl = $("#scrollCurve");
+    const invite = $(".invite");
+    const sticky = $(".sticky-rsvp");
+    const decos = hero ? hero.querySelectorAll(".deco[data-speed]") : [];
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let ticking = false;
+    let pathLen = 0;
+
+    const measurePath = () => {
+      if (curve && typeof curve.getTotalLength === "function") {
+        pathLen = curve.getTotalLength();
+      }
+    };
+    measurePath();
+
+    const tick = () => {
+      const y = root.scrollTop;
+      const vh = root.clientHeight;
+      const max = Math.max(1, root.scrollHeight - vh);
+      const p = Math.min(1, y / vh);
+      const pct = Math.min(1, Math.max(0, y / max));
+
+      if (curve && pathLen) {
+        curve.style.strokeDasharray = `${pct * pathLen} ${pathLen}`;
+        const pt = curve.getPointAtLength(pct * pathLen);
+        if (bead && svgEl && invite && typeof svgEl.createSVGPoint === "function") {
+          const p = svgEl.createSVGPoint();
+          p.x = pt.x;
+          p.y = pt.y;
+          const ctm = curve.getScreenCTM();
+          if (ctm) {
+            const screen = p.matrixTransform(ctm);
+            const box = invite.getBoundingClientRect();
+            bead.style.left = `${screen.x - box.left}px`;
+            bead.style.top = `${screen.y - box.top}px`;
+          }
+        }
+      }
+      if (bead) bead.classList.toggle("is-on", y > vh * 0.22);
+      if (sticky) sticky.classList.toggle("is-show", y > vh * 0.55);
+
+      if (!reduce) {
+        if (y > 4) {
+          decos.forEach((el) => {
+            const speed = Number(el.dataset.speed || 0);
+            const x = speed < 0 ? y * speed * 0.45 : y * speed * 0.2;
+            el.style.transform = `translate3d(${x}px, ${y * speed}px, 0)`;
+          });
+        }
+        if (content) {
+          content.style.transform = `translate3d(0, ${y * 0.22}px, 0) scale(${1 - p * 0.06})`;
+          content.style.opacity = String(Math.max(0, 1 - p * 1.2));
+        }
+        if (hint) hint.style.opacity = String(Math.max(0, 1 - y / 90));
+      }
+
+      ticking = false;
+    };
+
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(tick);
+    };
+
+    root.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", () => {
+      measurePath();
+      tick();
+    });
+    tick();
   }
 
   function pad(n) {
@@ -199,8 +250,9 @@
   function openInvite() {
     $("#startScreen").classList.add("is-gone");
     $(".app").classList.add("is-open");
+    $(".phone").classList.add("is-open");
     reveal();
-    parallax();
+    motion();
     const music = $("#bgMusic");
     if (data.music) {
       music.play().catch(() => {});

@@ -1,6 +1,9 @@
+server.py
+data/
 __pycache__/
-*.pyc
 .vercel
+.git
+*.pyc
 .DS_Store
 Thumbs.db
 *.log

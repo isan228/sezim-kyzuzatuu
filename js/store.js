@@ -5,8 +5,13 @@
     return (global.INVITE && global.INVITE.adminPin) || "2026";
   }
 
-  function onPages() {
-    return /\.github\.io$/i.test(location.hostname);
+  function onStaticHost() {
+    const host = location.hostname;
+    return (
+      /\.github\.io$/i.test(host) ||
+      /\.vercel\.app$/i.test(host) ||
+      /\.now\.sh$/i.test(host)
+    );
   }
 
   function pantryId() {
@@ -64,7 +69,7 @@
   }
 
   async function localApiList(adminPin) {
-    if (onPages()) throw new Error("pages");
+    if (onStaticHost()) throw new Error("static");
     const res = await fetch("/api/rsvps?pin=" + encodeURIComponent(adminPin), {
       headers: { "X-Admin-Pin": adminPin }
     });
@@ -73,7 +78,7 @@
   }
 
   async function localApiCreate(item) {
-    if (onPages()) throw new Error("pages");
+    if (onStaticHost()) throw new Error("static");
     const res = await fetch("/api/rsvp", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -84,7 +89,7 @@
   }
 
   async function localApiDelete(id, adminPin) {
-    if (onPages()) throw new Error("pages");
+    if (onStaticHost()) throw new Error("static");
     const res = await fetch("/api/rsvps/" + id + "?pin=" + encodeURIComponent(adminPin), {
       method: "DELETE",
       headers: { "X-Admin-Pin": adminPin }

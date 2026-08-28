@@ -32,11 +32,20 @@
       <audio id="bgMusic" loop preload="none"></audio>
 
       <main class="invite">
+        <svg class="scroll-curve" id="scrollCurve" viewBox="0 0 100 400" preserveAspectRatio="none" aria-hidden="true">
+          <path class="curve-track" d="M72 8 C 90 48, 22 86, 68 124 C 96 162, 18 200, 64 238 C 92 276, 26 314, 74 352 C 90 376, 48 392, 70 396" />
+          <path class="curve-fill" id="scrollFill" d="M72 8 C 90 48, 22 86, 68 124 C 96 162, 18 200, 64 238 C 92 276, 26 314, 74 352 C 90 376, 48 392, 70 396" />
+        </svg>
+        <span class="scroll-bead" id="scrollBead" aria-hidden="true">
+          <svg viewBox="0 0 12 12">
+            <path d="M6 10.4C6 10.4 1.4 7.2 1.4 4.3A2.5 2.5 0 0 1 4.3 1.6c.8 0 1.4.4 1.7 1 .3-.6.9-1 1.7-1a2.5 2.5 0 0 1 2.9 2.7c0 2.9-4.6 6.1-4.6 6.1z"/>
+          </svg>
+        </span>
         <header class="hero">
-          <img class="deco shyrdak" src="img/shyrdak.png" alt="" />
-          <img class="deco drape" src="img/drape.png" alt="" />
-          <img class="deco landscape" id="heroMedia" src="img/landscape.png" alt="" />
-          <img class="deco flowers" src="img/gypsophila.png" alt="" />
+          <img class="deco shyrdak" data-speed="-0.18" src="img/shyrdak.png" alt="" />
+          <img class="deco drape" data-speed="0.16" src="img/drape.png" alt="" />
+          <img class="deco landscape" data-speed="0.32" id="heroMedia" src="img/landscape.png" alt="" />
+          <img class="deco flowers" data-speed="-0.22" src="img/gypsophila.png" alt="" />
           <div class="hero-content">
             <span class="ornament reveal-hero" aria-hidden="true"></span>
             <p class="kicker reveal-hero" id="invitedLine">Сиздерди</p>
@@ -45,7 +54,7 @@
             <p class="call-line reveal-hero d3" id="callLine">Чакырабыз!</p>
             <span class="ornament reveal-hero d4" aria-hidden="true"></span>
             <p class="hosts-label reveal-hero d5" id="hostsLabel">Той ээлери</p>
-            <h2 class="script-name reveal-hero d6" id="heroName">Уран Назира</h2>
+            <h2 class="script-name reveal-hero d6" id="heroName">Улан Назира</h2>
             <span class="ornament reveal-hero d7" aria-hidden="true"></span>
             <div class="meta reveal-hero d8">
               <div class="meta-col">
@@ -84,39 +93,26 @@
         </header>
 
         <section class="sec">
-          <h2 class="section-title reveal" id="calendarTitle">Сентябрь 2026</h2>
-          <div class="cal reveal" id="calendar"></div>
+          <h2 class="section-title reveal from-up" id="calendarTitle">Сентябрь 2026</h2>
+          <div class="cal reveal scale-in" id="calendar"></div>
         </section>
 
         <section class="sec">
-          <h2 class="section-title reveal" id="countdownTitle">Тойго чейин</h2>
-          <div class="countdown reveal">
+          <h2 class="section-title reveal from-up" id="countdownTitle">Тойго чейин</h2>
+          <div class="countdown stagger-in" id="countdown">
             <div class="count-card"><strong id="days">00</strong><span id="labelDays">күн</span></div>
             <div class="count-card"><strong id="hours">00</strong><span id="labelHours">саат</span></div>
             <div class="count-card"><strong id="minutes">00</strong><span id="labelMinutes">мүнөт</span></div>
             <div class="count-card"><strong id="seconds">00</strong><span id="labelSeconds">сек</span></div>
           </div>
-          <button class="gold-btn reveal" id="icsBtn" type="button">Календарга кошуу</button>
+          <button class="gold-btn reveal from-up" id="icsBtn" type="button">Календарга кошуу</button>
         </section>
 
         <section class="sec" id="place">
-          <h2 class="section-title reveal" id="whereTitle">Банкет залы</h2>
-          <article class="place-card reveal">
-            <div class="map-window">
-              <iframe
-                class="map-osm"
-                title="Петровка"
-                src="https://www.openstreetmap.org/export/embed.html?bbox=74.03%2C42.82%2C74.08%2C42.86&amp;layer=mapnik&amp;marker=42.839206%2C74.055542"
-                referrerpolicy="no-referrer-when-downgrade"
-              ></iframe>
-              <iframe
-                id="mapFrame"
-                class="map-2gis"
-                title="Rim Grand Hall — 2GIS"
-                referrerpolicy="no-referrer-when-downgrade"
-                allowfullscreen
-              ></iframe>
-              <a class="map-chip" id="mapTap" href="https://2gis.kg/bishkek/firm/70000001063765710" target="_blank" rel="noopener">2GIS ачуу</a>
+          <h2 class="section-title reveal from-left" id="whereTitle">Банкет залы</h2>
+          <article class="place-card reveal scale-in">
+            <div class="venue-photo">
+              <img id="venuePhoto" src="img/venue.jpg" alt="Rim Grand Hall">
             </div>
             <div class="venue-body">
               <p class="place-time" id="venueName">Rim Grand Hall</p>
@@ -128,12 +124,12 @@
               <p class="note" id="venueRating">2GIS баасы: 4.7 · 195 баа</p>
             </div>
           </article>
-          <a class="gold-btn reveal" id="mapBtn" href="https://2gis.kg/bishkek/firm/70000001063765710" target="_blank" rel="noopener">2GIS картасын ачуу</a>
-          <a class="ghost-btn reveal" id="routeBtn" href="https://2gis.kg/bishkek/directions/to/70000001063765710" target="_blank" rel="noopener">Маршрут</a>
+          <a class="gold-btn reveal from-left" id="mapBtn" href="https://2gis.kg/bishkek/firm/70000001063765710" target="_blank" rel="noopener">2GIS'те көрсөтүү</a>
+          <a class="ghost-btn reveal from-right" id="routeBtn" href="https://2gis.kg/bishkek/directions/to/70000001063765710" target="_blank" rel="noopener">Маршрутту көрсөтүү</a>
         </section>
 
         <section class="sec" id="rsvp">
-          <form class="rsvp-form reveal" id="rsvpForm">
+          <form class="rsvp-form reveal scale-in" id="rsvpForm">
             <span class="ornament" aria-hidden="true"></span>
             <h2 class="section-title" id="formTitle">Конок анкетасы</h2>
 
@@ -159,8 +155,8 @@
           </form>
         </section>
 
-        <footer class="footer">
-          <p class="hosts" id="hosts">Той ээлери · Уран Назира</p>
+        <footer class="footer reveal from-up">
+          <p class="hosts" id="hosts">Той ээлери · Улан Назира</p>
           <p class="blessing" id="footerBlessing">Ак ниеттен, жаркын келечекке...</p>
         </footer>
 

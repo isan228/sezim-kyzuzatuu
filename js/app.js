@@ -51,7 +51,10 @@
     renderChoices();
 
     if (data.music) {
-      $("#bgMusic").src = data.music;
+      const music = $("#bgMusic");
+      music.src = data.music;
+      music.loop = true;
+      music.preload = "auto";
       $("#musicBtn").hidden = false;
     }
   }
@@ -247,17 +250,22 @@
     URL.revokeObjectURL(url);
   }
 
+  function playMusic() {
+    if (!data.music) return;
+    const music = $("#bgMusic");
+    music.loop = true;
+    music.play().then(() => {
+      $("#musicBtn").classList.add("is-on");
+    }).catch(() => {});
+  }
+
   function openInvite() {
     $("#startScreen").classList.add("is-gone");
     $(".app").classList.add("is-open");
     $(".phone").classList.add("is-open");
     reveal();
     motion();
-    const music = $("#bgMusic");
-    if (data.music) {
-      music.play().catch(() => {});
-      $("#musicBtn").classList.add("is-on");
-    }
+    playMusic();
   }
 
   function bind() {
@@ -266,12 +274,14 @@
     $("#musicBtn").addEventListener("click", () => {
       const music = $("#bgMusic");
       if (music.paused) {
-        music.play();
-        $("#musicBtn").classList.add("is-on");
+        playMusic();
       } else {
         music.pause();
         $("#musicBtn").classList.remove("is-on");
       }
+    });
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden && $("#musicBtn").classList.contains("is-on")) playMusic();
     });
 
     $("#attendChoices").addEventListener("change", (e) => {

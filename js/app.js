@@ -147,6 +147,7 @@
     const svgEl = $("#scrollCurve");
     const invite = $(".invite");
     const sticky = $(".sticky-rsvp");
+    const place = $("#place");
     const decos = hero ? hero.querySelectorAll(".deco[data-speed]") : [];
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let ticking = false;
@@ -183,7 +184,11 @@
         }
       }
       if (bead) bead.classList.toggle("is-on", y > vh * 0.22);
-      if (sticky) sticky.classList.toggle("is-show", y > vh * 0.55);
+      if (sticky) {
+        const rootBox = root.getBoundingClientRect();
+        const placeBottom = place ? place.getBoundingClientRect().bottom : 0;
+        sticky.classList.toggle("is-show", placeBottom < rootBox.bottom - 16);
+      }
 
       if (!reduce) {
         if (y > 4) {

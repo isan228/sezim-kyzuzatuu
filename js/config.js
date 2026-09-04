@@ -36,7 +36,7 @@ window.INVITE = {
   },
   mapUrl: "https://2gis.kg/bishkek/firm/70000001039476658",
   mapOrgId: "70000001039476658",
-  routeUrl: "https://2gis.kg/bishkek/directions/to/70000001039476658",
+  routeUrl: "https://2gis.kg/bishkek/directions/points/%7C74.624113%2C42.852035%3B70000001039476658",
   telegramAlbum: "",
   music: "music.mp3",
   hostsLabel: "Той ээлери",

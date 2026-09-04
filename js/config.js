@@ -31,9 +31,6 @@ window.INVITE = {
     floor: "2 кабат",
     city: "Бишкек",
     district: "Октябрь району",
-    hours: "Күн сайын 10:00–22:00",
-    rating: "4.9",
-    reviews: "1195",
     lat: 42.852035,
     lon: 74.624113
   },
@@ -56,8 +53,6 @@ window.INVITE = {
     map: "2GIS'те көрсөтүү",
     route: "Маршрутту көрсөтүү",
     whereTitle: "Банкет залы",
-    hoursLabel: "Иш убактысы",
-    ratingLabel: "2GIS баасы",
     ics: "Календарга кошуу",
     formTitle: "Конок анкетасы",
     nameLabel: "Сиздин атыңыз:",

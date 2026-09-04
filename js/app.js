@@ -30,8 +30,6 @@
     $("#venueType").textContent = data.venue.type;
     $("#venueStreet").textContent = `${data.venue.street}, ${data.venue.floor}`;
     $("#venueCity").textContent = `${data.venue.city}, ${data.venue.district}`;
-    $("#venueHours").textContent = `${ui.hoursLabel}: ${data.venue.hours}`;
-    $("#venueRating").textContent = `${ui.ratingLabel}: ${data.venue.rating} · ${data.venue.reviews} баа`;
     if ($("#venuePhoto") && data.photos.venue) $("#venuePhoto").src = data.photos.venue;
     $("#mapBtn").textContent = ui.map;
     $("#mapBtn").href = data.mapUrl;
